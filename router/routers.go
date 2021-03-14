@@ -17,7 +17,7 @@ type Route struct {
 var routes []Route
 
 func init() {
-	register("POST", "/v1/user/create", controller.CreatAccount, nil)
+	register("POST", "/v1/user/create", controller.CreateAccount, nil)
 	register("POST", "/v1/user/delete", controller.DeleteAccount, nil)
 	register("POST", "/v1/user/pwd/change", controller.ChangePwd, nil)
 	register("GET", "/v1/user/login", controller.Login, nil)
