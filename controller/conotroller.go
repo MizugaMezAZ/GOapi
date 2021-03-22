@@ -3,7 +3,6 @@ package controller
 import (
 	"api/models"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	//"github.com/gorilla/mux"
 )
@@ -26,22 +25,62 @@ func CreateAccount(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := dao.CreateAC(ac); err != nil {
+	if err := dao.CreateAC(&ac); err != nil {
 		responseWithJson(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	responseWithJson(w, http.StatusCreated, ac)
+	responseWithJson(w, http.StatusCreated, ac.Username+" Success create.")
 }
 
 func DeleteAccount(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "not implemented !")
+	var ac models.Account
+	if err := json.NewDecoder(r.Body).Decode(&ac); err != nil {
+		responseWithJson(w, http.StatusBadRequest, "Invalid request payload")
+		return
+	}
+
+	if err := dao.DeleteAC(&ac); err != nil {
+		responseWithJson(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	responseWithJson(w, http.StatusCreated, ac.Username+" Success delete.")
 }
 
 func ChangePwd(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "not implemented !")
+	var ac models.Account
+	if err := json.NewDecoder(r.Body).Decode(&ac); err != nil {
+		responseWithJson(w, http.StatusBadRequest, "Invalid request payload")
+		return
+	}
+
+	if err := dao.UpdateAC(&ac); err != nil {
+		responseWithJson(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	responseWithJson(w, http.StatusCreated, ac.Username+" Success change.")
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "not implemented !")
+	var ac models.Account
+	if err := json.NewDecoder(r.Body).Decode(&ac); err != nil {
+		responseWithJson(w, http.StatusBadRequest, "Invalid request payload")
+		return
+	}
+
+	err, tf := dao.FindAC(&ac)
+
+	if err != nil {
+		responseWithJson(w, http.StatusInternalServerError, "not log")
+		return
+	}
+
+	if tf {
+		responseWithJson(w, http.StatusCreated, ac.Username+" Success login.")
+	} else {
+		responseWithJson(w, http.StatusCreated, ac.Username+" Fail login.")
+	}
+
 }
