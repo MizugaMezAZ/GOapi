@@ -35,19 +35,22 @@ func (a *Account) UpdateAC(ac *Account) (err error) {
 	return
 }
 
-func (a *Account) FindAC(ac *Account) (err error, tr bool) {
+func (a *Account) LoginAC(ac *Account) (err error, tr bool) {
 	var checkac Account
 	db.Where("username = ?", ac.Username).First(&checkac)
 	result := db.Where("username = ?", ac.Username).First(&checkac)
 
+	err = result.Error
+
 	if result.Error != nil {
-		err = result.Error
 		return
 	}
 
 	if strings.Compare(ac.Password, checkac.Password) == 0 {
-		return err, true
+		tr = true
+		return
 	} else {
-		return err, false
+		tr = false
+		return
 	}
 }

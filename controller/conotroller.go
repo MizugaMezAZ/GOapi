@@ -4,11 +4,6 @@ import (
 	"api/models"
 	"encoding/json"
 	"net/http"
-	//"github.com/gorilla/mux"
-)
-
-var (
-	dao = models.Account{}
 )
 
 func responseWithJson(w http.ResponseWriter, code int, payload interface{}) {
@@ -25,7 +20,7 @@ func CreateAccount(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := dao.CreateAC(&ac); err != nil {
+	if err := ac.CreateAC(&ac); err != nil {
 		responseWithJson(w, http.StatusInternalServerError, err.Error())
 		return
 	}
@@ -40,7 +35,7 @@ func DeleteAccount(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := dao.DeleteAC(&ac); err != nil {
+	if err := ac.DeleteAC(&ac); err != nil {
 		responseWithJson(w, http.StatusInternalServerError, err.Error())
 		return
 	}
@@ -55,7 +50,7 @@ func ChangePwd(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := dao.UpdateAC(&ac); err != nil {
+	if err := ac.UpdateAC(&ac); err != nil {
 		responseWithJson(w, http.StatusInternalServerError, err.Error())
 		return
 	}
@@ -70,7 +65,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err, tf := dao.FindAC(&ac)
+	err, tf := ac.LoginAC(&ac)
 
 	if err != nil {
 		responseWithJson(w, http.StatusInternalServerError, "not log")
